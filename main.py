@@ -1,10 +1,12 @@
 # blackjack
 
 import random
+import os
+from ascii import logo
 
-# 11 is ace
-cards = [11, 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10]
-game_over = False
+
+def cls():
+    os.system('cls' if os.name == 'nt' else 'clear')
 
 
 def score(current_cards):
@@ -34,38 +36,52 @@ def compare(user_score, dealer_score):
         return "You lose!"
 
 
-player_hand = []
-dealer_hand = []
+def start_round():
 
+    print(logo)
 
-def deal_new_card():
-    """Selects a random card from the deck"""
-    card = random.choice(cards)
-    return card
+    player_hand = []
+    dealer_hand = []
 
+    # 11 is ace(11 is high, 1 is low )
+    cards = [11, 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10]
+    game_over = False
 
-for draw in range(2):
-    player_hand.append(deal_new_card())
-    dealer_hand.append(deal_new_card())
+    def deal_new_card():
+        """Selects a random card from the deck"""
+        card = random.choice(cards)
+        return card
 
-while not game_over:
-    user_score = score(player_hand)
-    dealer_score = score(dealer_hand)
+    for draw in range(2):
+        player_hand.append(deal_new_card())
+        dealer_hand.append(deal_new_card())
 
-    print(f"Your cards: {player_hand}, current score: {user_score}")
-    print(f"Dealer's first card: {dealer_hand[0]}")
+    while not game_over:
+        user_score = score(player_hand)
+        dealer_score = score(dealer_hand)
 
-    if user_score == 0 or dealer_score == 0 or user_score > 21:
-        game_over = True
-    else:
-        hit = input("Type 'y' to hit(another card) or type 'n' to pass: ")
-        if hit == 'y':
-            player_hand.append(deal_new_card())
-        else:
+        print(f"Your cards: {player_hand}, current score: {user_score}")
+        print(f"Dealer's first card: {dealer_hand[0]}")
+
+        if user_score == 0 or dealer_score == 0 or user_score > 21:
             game_over = True
+        else:
+            hit = input("Type 'y' to hit(another card) or type 'n' to pass: ")
+            if hit == 'y':
+                player_hand.append(deal_new_card())
+            else:
+                game_over = True
 
-while dealer_score != 0 and dealer_score < 17:
-    dealer_hand.append(deal_new_card())
-    dealer_score = score(dealer_hand)
+    while dealer_score != 0 and dealer_score < 17:
+        dealer_hand.append(deal_new_card())
+        dealer_score = score(dealer_hand)
 
-print(compare(user_score, dealer_score))
+    print(f" Your final cards: {player_hand}, final score: {user_score} ")
+    print(
+        f" Dealer's final cards: {dealer_hand}, final score: {dealer_score} ")
+    print(compare(user_score, dealer_score))
+
+
+while input("Do you want to play a round of Blackjack? Type 'y' or 'n': ") == "y":
+    cls()
+    start_round()
