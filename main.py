@@ -17,6 +17,23 @@ def score(current_cards):
     return sum(current_cards)
 
 
+def compare(user_score, dealer_score):
+    if user_score == dealer_score:
+        return "Draw!"
+    elif dealer_score == 0:
+        return "Dealer has Blackjack, you lose"
+    elif user_score == 0:
+        return "Blackjack! You win!"
+    elif user_score > 21:
+        return "Bust! You lose"
+    elif dealer_score > 21:
+        return "Dealer busts!"
+    elif user_score > dealer_score:
+        return "You win!"
+    else:
+        return "You lose!"
+
+
 player_hand = []
 dealer_hand = []
 
@@ -46,3 +63,9 @@ while not game_over:
             player_hand.append(deal_new_card())
         else:
             game_over = True
+
+while dealer_score != 0 and dealer_score < 17:
+    dealer_hand.append(deal_new_card())
+    dealer_score = score(dealer_hand)
+
+print(compare(user_score, dealer_score))
